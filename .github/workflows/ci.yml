@@ -1,32 +1,34 @@
+# define o nome 
 name: Monorepo CI Pipeline
 
+# Precisa do on para rodar 
 on:
-  #Dispara automaticamente ao enviar novos commits para a branch main
-  push:
-      branches:
-        -main
-  # Dispara na abertura ou atualização de pull Request direcionados para a branch main
-  pull request:
-      branches:
-        -main
-  # Permite execução manual pelo painel web do Github (aba Actions -> Run workflow)
-  workflow_dispatch:
+    # Dispara automaticamente ao enviar novos commits para a branch main
+    push:
+        branches:
+            - main
+    # Dispara na abertura ou atualização de pull requests direcionados para a branch main (sequencial)
+    pull_request:
+        branches:
+            - main
+    # Permite execução manual pelo painél web do Github (aba Actions -> Run workflow)
+    workflow_dispatch:
 
 jobs:
-    validar-monorepo:
-        name: Validar Backend, Frontend e Docker
-        run-on: ubuntu-latest
- 
-        steps:
-           - name: 1. Baixar o codigo fonte
-             uses: actions/checkout@v4
- 
-           - name: 2. Habilitar o pnpm
-             uses: pnpm/actions-setup@v4
- 
-           - name: 3. Configurar o Node.js 24 com o Cache de Dependencias
-             uses: actions/setup-node@v4
-             with:
+    validar_monorepo: # nome 
+        name: Validar Backend, Frontend e Docker # aparece nos logs
+        runs-on: ubuntu-latest # versão da MV
+
+        steps: # etapas
+            - name: 1. Baixar o codigo fonte
+              uses: actions/checkout@v4 # repositório com algumas configurações "prontas" (o use actions que já estão prontas)
+
+            - name: 2. Habilitar o pnpm
+              uses: pnpm/action-setup@v4 
+
+            - name: 3. Configurar o Node.js 24 com Cache de Dependencias
+              uses: actions/setup-node@v4
+              with: # passa as propriedades
                 node-version: 24
                 cache: 'pnpm'
-                cache-dependecy-path: '**/pnpm-lock.yaml'
+                cache-dependecy-path: '**/pnpm-lock-yml'
