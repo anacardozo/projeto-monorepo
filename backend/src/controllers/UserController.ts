@@ -129,7 +129,7 @@ export class UserController {
         }
 
         const emailEmUso = await User.findOne({
-          where: { email: email.trim().toLowerCase },
+          where: { email: email.trim().toLowerCase() },
         });
 
         if (emailEmUso && emailEmUso.id !== id) {
