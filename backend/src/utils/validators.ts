@@ -39,7 +39,7 @@ export function validateUserInput(input: Partial<UserInput>): ValidationResult {
     errors.push('O nome deve conter no mínimo 3 caracteres');
   }
 
-  if (!input.email || isValidEmail(input.email)) {
+  if (!input.email || !isValidEmail(input.email)) {
     errors.push('O e-mail informado é inválido');
   }
 
