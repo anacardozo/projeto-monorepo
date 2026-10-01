@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { FormEvent } from "react";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
-import { UserTable } from "./components/UserTable";
+import { UserTable } from "./components/userTable";
 import { userService } from "./services/api";
 import type { User } from "./types/user";
 
@@ -11,8 +11,8 @@ export default function App() {
   const [carregandoLista, setCarregandoLista] = useState<boolean>(true);
   const [enviandoForm, setEnviandoForm] = useState<boolean>(false);
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
-  const [carregando, setCarregando] = useState<boolean>(true);
-  const [erro, setErro] = useState<string | null>(null);
+  // const [carregando, setCarregando] = useState<boolean>(true);
+  // const [erro, setErro] = useState<string | null>(null);
   const [gatilhoRecarga, setGatilhoRecarga] = useState<number>(0);
 
   // Estados controlados do formulário
