@@ -78,3 +78,4 @@ jobs:
                 echo "Integração Continua concluida com sucesso!"
                 echo "Autor da alteração: ${{ github.actor }}"
                 echo "Commit validado: ${{ github.sha }}"
+    
