@@ -144,7 +144,7 @@ describe('Testes de Integracao: Rotas de Usuarios (/api/users)', () => {
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('erro');
       expect(response.body.erro).toBe(
-        'Já existe um usuário cadastrado com este e-mail.',
+        'Já existe um usuário cadastrado com este e-mail',
       );
     });
   });
