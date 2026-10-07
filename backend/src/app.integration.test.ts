@@ -6,10 +6,9 @@ describe('Testes de Integração: Endpoints Base da Aplicação', () => {
   describe('GET /api/health', () => {
     it('deve responder com status 200 e payload de status operacional', async () => {
       // Act: Dispara a requisição HTTP para a rota de Health Check
-      const response = await request(app).get('/api/health').set(
-        'Accept',
-        'application/json',
-      );
+      const response = await request(app)
+        .get('/api/health')
+        .set('Accept', 'application/json');
 
       // Assert: Valida status, cabeçalhos e o corpo retornado
       expect(response.status).toBe(200);

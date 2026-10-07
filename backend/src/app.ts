@@ -26,6 +26,6 @@ app.get('/api/health', (req: Request, res: Response) => {
 app.use('/api', appRoutes);
 
 // Rota da documentação interativa
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-export {app};
+export { app };

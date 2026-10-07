@@ -2,7 +2,7 @@ export interface UserInput {
   name: string;
   email: string;
   // ? -> opcional
-  password?: string
+  password?: string;
   role?: 'admin' | 'aluno' | 'professor';
 }
 
@@ -50,14 +50,12 @@ export function validateUserInput(input: Partial<UserInput>): ValidationResult {
   }
 
   const validRoles = ['admin', 'aluno', 'professor'];
-  if (input.role && !validRoles.includes(input.role)){
-    errors.push('O perfil de acesso informado é inválido')
+  if (input.role && !validRoles.includes(input.role)) {
+    errors.push('O perfil de acesso informado é inválido');
   }
-
 
   return {
     isValid: errors.length === 0,
     errors,
-  }
-
+  };
 }
