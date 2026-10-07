@@ -70,7 +70,7 @@ describe('Testes de Rotas com Mocking do Model User', () => {
     expect(response.body.erro).toBe(
       'Já existe um usuário cadastrado com este e-mail',
     );
-    // Garante que o metodo create NUNCA foi chamado apos a deteccao do conflito
+    // Garante que o metodo create NUNCA foi chamado apos a deteccao do conflito no codigo
     expect(User.create).not.toHaveBeenCalled();
   });
 });
