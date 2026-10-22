@@ -18,16 +18,17 @@ export class AuthController {
       const user = await User.findOne({
         where: { email: email.trim().toLowerCase() },
       });
-
       if (!user || !user.senha_hash) {
-        return res.status(401).json({ erro: 'Crendeciais inválidas' });
+        return res.status(401).json({ erro: 'Credenciais invalidas.' });
       }
 
+      // Valida a senha comparando o texto puro com o hash
       const senhaValida = await bcrypt.compare(password, user.senha_hash);
       if (!senhaValida) {
-        return res.status(401).json({ erro: 'Crendeciais inválidas' });
+        return res.status(401).json({ erro: 'Credenciais invalidas.' });
       }
 
+      // Gera o token JWT com validade de 1 hora
       const token = jwt.sign(
         { id: user.id, email: user.email, nome: user.nome },
         JWT_SECRET,
@@ -35,7 +36,7 @@ export class AuthController {
       );
 
       return res.status(200).json({
-        message: 'Login Realizado com Sucesso!',
+        mensagem: 'Login realizado com sucesso!',
         token,
       });
     } catch (error: any) {

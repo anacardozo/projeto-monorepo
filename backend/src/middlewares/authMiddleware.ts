@@ -12,7 +12,7 @@ export function authMiddleware(
 
     // verifica se o token foi enviado no formato "Bearer <token>"
     if (!authHeader || !authHeader.startsWith('Bearer')) {
-      return res.status(401).json({ erro: 'Token não fornecido' });
+      return res.status(401).json({ erro: 'Token não fornecido.' });
     }
 
     const token = authHeader.split(' ')[1];

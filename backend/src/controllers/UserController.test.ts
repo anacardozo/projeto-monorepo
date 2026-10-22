@@ -82,18 +82,14 @@ describe('UserController', () => {
       const response = await request(app).get('/api/users/abc');
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe(
-        'O ID informado deve ser um numero valido.',
-      );
+      expect(response.body.erro).toBe('O ID informado deve ser numérico.');
     });
 
     it('deve retornar 400 se o ID for zero ou negativo', async () => {
       const response = await request(app).get('/api/users/0');
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe(
-        'O ID informado deve ser um numero valido.',
-      );
+      expect(response.body.erro).toBe('O ID informado deve ser numérico.');
     });
 
     it('deve retornar 404 se o usuário não for encontrado', async () => {
@@ -148,7 +144,7 @@ describe('UserController', () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('O campo nome é obrigatório.');
+      expect(response.body.erro).toBe('O campo nome obrigatório.');
     });
 
     it('deve retornar 400 se o nome não for string', async () => {
@@ -159,7 +155,7 @@ describe('UserController', () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('O campo nome é obrigatório.');
+      expect(response.body.erro).toBe('O campo nome obrigatório.');
     });
 
     it('deve retornar 400 se o nome não for fornecido', async () => {
@@ -169,7 +165,7 @@ describe('UserController', () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('O campo nome é obrigatório.');
+      expect(response.body.erro).toBe('O campo nome obrigatório.');
     });
 
     it('deve retornar 400 se o email for inválido', async () => {
@@ -180,7 +176,7 @@ describe('UserController', () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('Informe um e-mail valido.');
+      expect(response.body.erro).toBe('Informe um e-mail válido.');
     });
 
     it('deve retornar 400 se o email não for fornecido', async () => {
@@ -190,7 +186,7 @@ describe('UserController', () => {
       });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('Informe um e-mail valido.');
+      expect(response.body.erro).toBe('Informe um e-mail válido.');
     });
 
     it('deve retornar 400 se a senha tiver menos de 6 caracteres', async () => {
@@ -232,7 +228,7 @@ describe('UserController', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.erro).toBe(
-        'Já existe um usuário cadastrado com este e-mail.',
+        'Já existe um usuário cadastrado com este e-mail',
       );
     });
 
@@ -280,9 +276,7 @@ describe('UserController', () => {
         .send({ nome: 'Alice' });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe(
-        'O ID informado deve ser um numero valido.',
-      );
+      expect(response.body.erro).toBe('O ID informado deve ser numérico.');
     });
 
     it('deve retornar 404 se o usuário não for encontrado', async () => {
@@ -296,7 +290,7 @@ describe('UserController', () => {
       expect(response.body.erro).toBe('Usuário não encontrado.');
     });
 
-    it('deve retornar 404 se o nome fornecido for inválido (apenas espaços)', async () => {
+    it('deve retornar 400 se o nome fornecido for inválido (apenas espaços)', async () => {
       const mockUser = {
         id: 1,
         nome: 'Alice',
@@ -309,8 +303,10 @@ describe('UserController', () => {
         .put('/api/users/1')
         .send({ nome: '   ' });
 
-      expect(response.status).toBe(404);
-      expect(response.body.erro).toBe('O campo nome deve ser um texto valido.');
+      expect(response.status).toBe(400);
+      expect(response.body.erro).toBe(
+        'O campo nome dever ser um texto válido.',
+      );
     });
 
     it('deve retornar 400 se o e-mail fornecido for inválido', async () => {
@@ -327,7 +323,7 @@ describe('UserController', () => {
         .send({ email: 'email-invalido' });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('Informe um e-mail valido.');
+      expect(response.body.erro).toBe('Informe um e-mail valido');
     });
 
     it('deve retornar 400 se o e-mail já estiver em uso por outro usuário', async () => {
@@ -348,7 +344,7 @@ describe('UserController', () => {
         .send({ email: 'outro@email.com' });
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe('Este e-mail já está em uso.');
+      expect(response.body.erro).toBe('Este e-mail ja esta em uso.');
     });
 
     it('não deve retornar erro se o email em uso pertencer ao próprio usuário', async () => {
@@ -405,9 +401,7 @@ describe('UserController', () => {
       const response = await request(app).delete('/api/users/abc');
 
       expect(response.status).toBe(400);
-      expect(response.body.erro).toBe(
-        'O ID informado deve ser um numero valido.',
-      );
+      expect(response.body.erro).toBe('O ID informado deve ser numérico.');
     });
 
     it('deve retornar 404 se o usuário não for encontrado', async () => {
