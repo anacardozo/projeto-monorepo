@@ -20,12 +20,12 @@ export function AppLayout() {
         </div>
 
         <div className="flex items-center gap-4 text-sm">
-          <span className="text-slate-600 font-medium">
+          <span className="text-slate-600 font-semibold">
             {user?.nome || user?.email}
           </span>
           <button
             onClick={logout}
-            className="text-red-600 hover:text-red-700 font-medium transition-colors"
+            className="text-red-600 hover:text-red-700 font-medium transition-colors cursor-pointer"
           >
             Sair
           </button>
