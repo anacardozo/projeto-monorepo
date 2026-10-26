@@ -1,12 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthProvider";
-import { ProtectedRoute } from "./components/ProjectedRoute";
-import { PublicOnlyRoute } from "./components/PublicOnlyRoutes";
-import { AppLayout } from "./components/AppLayout";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthProvider';
+import { ProtectedRoute } from './components/ProjectedRoute';
+import { PublicOnlyRoute } from './components/PublicOnlyRoutes';
+import { AppLayout } from './components/AppLayout';
+import { Toaster } from '@/components/ui/sonner';
 
-import { Login } from "./pages/Login";
-import { Dashboard } from "./pages/Dashboard";
-import { Perfil } from "./pages/Perfil";
+import { Login } from './pages/Login';
+import { Dashboard } from './pages/Dashboard';
+import { Perfil } from './pages/Perfil';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </AuthProvider>
   );
 }
