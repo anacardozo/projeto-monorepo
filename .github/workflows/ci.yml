@@ -1,7 +1,7 @@
 name: Monorepo CI Pipeline
 
 on:
-  # Dispara automaticamente ao enviar novos commits para a branche main
+  # Dispara automaticamente ao enviar novos commits para a branch main
   push:
     branches:
       - main
@@ -14,7 +14,7 @@ on:
   pull_request:
     branches:
       - main
-  # Permite execução manual pelo painel web do gitgub action
+  # Permite execução manual pelo painel web do GitHub Actions
   workflow_dispatch:
 
 # Permite cancelar execuções anteriores na mesma branch se novos commits forem enviados
@@ -25,16 +25,16 @@ concurrency:
 jobs:
   # Job 1: Validações Estáticas e Testes Unitários Rápidos (Fail-Fast)
   validacoes-e-testes:
-    name: 1. Qualidade, Tipos e Testes Unitários
+    name: Qualidade, Tipos e Testes Unitários
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
 
     steps:
-      - name: 1.Baixar o código-fonte
+      - name: 1. Baixar o código-fonte
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Necessário para o SonarQube analisar o histórico de comits
+          fetch-depth: 0 # Necessário para o SonarQube analisar o histórico de commits
 
       - name: 2. Habilitar o pnpm
         uses: pnpm/action-setup@v4
@@ -51,7 +51,7 @@ jobs:
           cd backend
           pnpm install --frozen-lockfile
 
-      - name: 5. Validar Padronização de Código com ESlint
+      - name: 5. Validar Padronização de Código com ESLint
         run: |
           cd backend
           pnpm run lint
@@ -95,7 +95,7 @@ jobs:
           echo "## Relatório de Cobertura de Código e Análise Estática" >> $GITHUB_STEP_SUMMARY
           echo "Execução de testes e inspeção estática concluída para commit \`${{ github.sha}}\`." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Relatório LCOV enviado para o SonarQub com sucesso." >> $GITHUB_STEP_SUMMARY
+          echo "Relatório LCOV enviado para o SonarQube com sucesso." >> $GITHUB_STEP_SUMMARY
           echo "Os relatórios detalhados em HTML foram salvos como artefatos desta execução" >> $GITHUB_STEP_SUMMARY
 
       - name: 12. Salvar Artefatos de Cobertura (HTML e LCOV)
@@ -103,58 +103,19 @@ jobs:
         if: always()
         with:
           name: coverage-report-backend
-          path: Backend/coverage
+          path: backend/coverage
           retention-days: 14
 
   # Job 2: Compilação de Produção e Imagens Docker (Só executa se o Job 1 passar)
-  build-e-docker:
-    name: 2. Compilação e Imagens Docker
-    needs: validacoes-e-testes
+  validar-build-docker:
+    name: 2. Validação de Build do Docker
+    needs: [validacoes-e-testes]
     runs-on: ubuntu-latest
 
     steps:
-      - name: 1.Baixar o código-fonte
+      - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: 2. Habilitar o pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 11
-
-      - name: 3. Configurar o Node.js 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: 4. Instalar Dependências do Backend
+      - name: 2. Testar se o Dockerfile Compila sem Erros
         run: |
-          cd backend
-          pnpm install --frozen-lockfile
-
-      - name: 5. Validar Tipos e Compilar o Backend (Express)
-        run: |
-          cd backend
-          pnpm run build
-
-      - name: 6. Validar Construção da Imagem Docker da API
-        run: |
-          docker build -t api-service:test ./backend
-
-      - name: 7. Validar Frontend (quando presente no monorepo)
-        run: |
-          if [ -d "app"]; then
-            echo "subprojeto frontend encontrado. Iniciando validação..."
-            cd app
-            pnpm install --frozen-lockfile
-            pnpm run build
-            # docker build -t app-service:test .
-          else
-            echo "Subprojeto app ainda não adicionado ao monorepo."
-          fi
-
-      - name: 8. Resumo da Execução
-        run: |
-          echo "### Resumo da Execução do Pipeline de CI" >> $GITHUB_STEP_SUMMARY
-          echo "Integração Contínua concluída com sucesso!" >> $GITHUB_STEP_SUMMARY
-          echo "- Autor: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          docker build -t api-service:smoke-test ./backend
