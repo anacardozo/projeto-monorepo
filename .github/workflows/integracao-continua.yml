@@ -5,16 +5,16 @@ on:
   push:
     branches:
       - main
-    paths-ignore: 
+    paths-ignore:
       - "landing/**"
       - ".github/workflows/deploy-landing.yml"
       - "docs/**"
       - "README.md"
-  # Dispara na abertura ou atualização de Pull Request direcionados para a branch main
+  # Dispara na abertura ou atualização de Pull Requests direcionados para a branch main
   pull_request:
     branches:
       - main
-  # Permite execução manual pelo painel web do GitHub Actions
+  # Permite execução manual pelo painel web do Github Actions
   workflow_dispatch:
 
 # Permite cancelar execuções anteriores na mesma branch se novos commits forem enviados
@@ -25,7 +25,7 @@ concurrency:
 jobs:
   # Job 1: Validações Estáticas e Testes Unitários Rápidos (Fail-Fast)
   validacoes-e-testes:
-    name: Qualidade, Tipos e Testes Unitários
+    name: 1. Qualidade, Tipos e Testes Unitários
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
@@ -51,12 +51,12 @@ jobs:
           cd backend
           pnpm install --frozen-lockfile
 
-      - name: 5. Validar Padronização de Código com ESLint
+      - name: 5. Validar Padronização de Código (ESLint)
         run: |
           cd backend
           pnpm run lint
 
-      - name: 6. Validar Formatação de Arquivos com o Prettier
+      - name: 6. Validar Formatação de Arquivos (Prettier)
         run: |
           cd backend
           pnpm run format:check
@@ -79,6 +79,7 @@ jobs:
           projectBaseDir: backend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: 10. Validar SonarQube Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@v1
@@ -88,15 +89,16 @@ jobs:
         continue-on-error: true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      - name: 11. Publicar Relatório de Cobertura do resumo do Job
+      - name: 11. Publicar Relatório de Cobertura no Resumo do Job
         if: always()
         run: |
           echo "## Relatório de Cobertura de Código e Análise Estática" >> $GITHUB_STEP_SUMMARY
-          echo "Execução de testes e inspeção estática concluída para commit \`${{ github.sha}}\`." >> $GITHUB_STEP_SUMMARY
+          echo "Execução de testes e inspeção estática concluídas para commit \`${{ github.sha }}\`." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Relatório LCOV enviado para o SonarQube com sucesso." >> $GITHUB_STEP_SUMMARY
-          echo "Os relatórios detalhados em HTML foram salvos como artefatos desta execução" >> $GITHUB_STEP_SUMMARY
+          echo "Os relatórios detalhados em HTML foram salvos como artefato desta execução." >> $GITHUB_STEP_SUMMARY
 
       - name: 12. Salvar Artefatos de Cobertura (HTML e LCOV)
         uses: actions/upload-artifact@v4
@@ -113,9 +115,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do Código
+      - name: 1. Checkout do Código
         uses: actions/checkout@v4
 
       - name: 2. Testar se o Dockerfile Compila sem Erros
         run: |
           docker build -t api-service:smoke-test ./backend
+
+      - name: 8. Resumo da Execução
+        run: |
+          echo "### Resumo da Execução do Pipeline de CI" >> $GITHUB_STEP_SUMMARY
+          echo "Integração Contínua concluída com sucesso!" >> $GITHUB_STEP_SUMMARY
+          echo "- Autor: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
