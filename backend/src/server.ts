@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 async function main() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync()
+    await sequelize.sync();
     console.log('Conexão com o PostgreSQL no Supabase realizada com sucesso.');
 
     app.listen(PORT, () => {
